@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Trip {
+  bike      Bike?     @relation(fields: [bikeId], references: [id])
+  bikeId    String?
+  createdAt DateTime  @default(now())
+  endDate   DateTime?
+  id        String    @id @default(cuid())
+  pack      Pack?     @relation(fields: [packId], references: [id])
+  packId    String?
+  route     Route?    @relation(fields: [routeId], references: [id])
+  routeId   String?
+  startDate DateTime?
+  updatedAt DateTime  @updatedAt
+}
+
+model Pack {
+  capacity   Int?
+  createdAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  name       String?
+  trips      Trip[]
+  updatedAt  DateTime @updatedAt
+  waterproof Boolean?
+}
+
+model Bike {
+  brand     String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  model     String?
+  trips     Trip[]
+  typeField String?
+  updatedAt DateTime @updatedAt
+}
+
+model Route {
+  createdAt DateTime @default(now())
+  distance  Float?
+  duration  Int?
+  id        String   @id @default(cuid())
+  name      String?
+  trips     Trip[]
+  updatedAt DateTime @updatedAt
+}
